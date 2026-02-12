@@ -29,8 +29,8 @@ def currency_converter(base_curr, target_curr):
 
 def user_input():
     base_curr = input("Enter a base currency(Eg: USD, GBP): ").upper()
-    target_curr = input("Enter a base currency(Eg: NPR, INR): ").upper()
-    amt = input("Enter an amount to conver to target currency: ")
+    target_curr = input("Enter a target currency(Eg: NPR, INR): ").upper()
+    amt = input("Enter an amount to convert to target currency: ")
     return base_curr, target_curr, amt
 
 
