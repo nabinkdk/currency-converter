@@ -28,6 +28,7 @@ def user_input():
     amt = input("Enter an amount to convert to target currency: ")
     return base_curr, target_curr, amt
 
+
 def main():
     while True:
         base_curr, target_curr, amt = user_input()
@@ -49,7 +50,9 @@ def main():
             continue
         rate = currency_converter(base_curr, target_curr)
         if rate is None:
-            print("\nFailed to get exchange rate.\nPlease provide valid currency code!\n")
+            print(
+                "\nFailed to get exchange rate.\nPlease provide valid currency code!\n"
+            )
             print("*******Please try again to convert*******\n")
             continue
         converted = amt * rate
