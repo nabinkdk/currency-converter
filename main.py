@@ -9,22 +9,17 @@ def currency_converter(base_curr, target_curr):
             timeout=3,
             verify=True,
         )
-    except requests.exceptions.HTTPError as errh:
-        print("HTTP Error")
-        print(errh.args[0])
+        response.raise_for_status()
+        data = response.json()
+        if data.get("result") == "error":
+            return None
+        rate = data.get("conversion_rate")
+        return rate
     except requests.exceptions.ReadTimeout as errt:
         print("Time Out")
-    except requests.exceptions.ConnectionError as conerr:
-        print("Connection Error !")
-
-    except requests.exceptions.SSLError as sslerr:
-        print("SSL Error")
-    except requests.exceptions.RequestException:
-        print("Something Went Wrong! ")
-    else:
-        data = response.json()
-        rate = data["conversion_rate"]
-        return rate
+    except requests.exceptions.RequestException as e:
+        print("Network error !")
+        return None
 
 
 def user_input():
@@ -32,7 +27,6 @@ def user_input():
     target_curr = input("Enter a target currency(Eg: NPR, INR): ").upper()
     amt = input("Enter an amount to convert to target currency: ")
     return base_curr, target_curr, amt
-
 
 def main():
     while True:
@@ -53,15 +47,15 @@ def main():
         except ValueError:
             print("Amount must be number !")
             continue
+        rate = currency_converter(base_curr, target_curr)
+        if rate is None:
+            print("\nFailed to get exchange rate.\nPlease provide valid currency code!\n")
+            print("*******Please try again to convert*******\n")
+            continue
+        converted = amt * rate
+
+        print(f"{amt} {base_curr} = {converted:.2f} {target_curr}")
         break
-    rate = currency_converter(base_curr, target_curr)
-    if rate is None:
-        print("Failed to get exchange rate.")
-        return
-
-    converted = amt * rate
-
-    print(f"{amt} {base_curr} = {converted:.2f} {target_curr}")
 
 
 if __name__ == "__main__":
